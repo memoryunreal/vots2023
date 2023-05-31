@@ -5,14 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "tam-vot",
             "type": "python",
             "request": "launch",
-            "program": "/hhd3/lizhe/anaconda3/bin/vot",
+            "program": "/hhd3/lizhe/anaconda3/envs/vot/bin/vot",
             "console": "integratedTerminal",
-            "args": ["evaluate",
-                    "--workspace","/home/lizhe/paper/vots2023/workspace/",
-                    "tam"],
+            "args": [
+                "evaluate",
+                "--workspace",
+                "/home/lizhe/paper/vots2023/workspace/",
+                "tam_1"
+            ],
             "justMyCode": false
         }
     ]

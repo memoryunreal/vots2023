@@ -1,1 +1,5 @@
-/workspace/sequences/
+workspace/
+mask_vis
+*.png
+*.txt
+mask_064
