@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: vot-trax
+Version: 4.0.1
+Summary: TraX protocol reference implementation wrapper for Python
+Home-page: https://github.com/votchallenge/trax/
+Author: Luka Cehovin Zajc
+Author-email: luka.cehovin@gmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Description-Content-Type: text/markdown
+
+
+`Visual Tracking eXchange protocol <http://prints.vicos.si/publications/311/>`_ is a simple protocol that enables easier evaluation of computer vision tracking algorithms. The basic idea is that a tracker communicates with the evaluation software using a set of text commands over the (standard) input/output streams or TCP sockets. 
+
+This package contains a Python wrapper to C library (using CTypes) available in the `support/python` directory. More information and source code available at `Github <https://github.com/votchallenge/trax/>`_.

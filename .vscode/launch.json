@@ -25,6 +25,54 @@
                 "tam_1"
             ],
             "justMyCode": false
+        },
+        {
+            "name": "tam-vot-docker",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/anaconda3/envs/trackl3d/bin/vot",
+            "console": "integratedTerminal",
+            "args": [
+                "evaluate",
+                "--workspace",
+                "/home/dataset/vots2023",
+                "tam"
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "vots-seqtrack",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/anaconda3/envs/trackl3d/bin/vot",
+            "cwd": "/home/paper/vots2023/experiment/VideoX/SeqTrack/",
+            "console": "integratedTerminal",
+            "args": [
+                "evaluate",
+                "--workspace",
+                "/home/dataset/vots2023",
+                "seqtrack_l256_ar"
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "1"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "vot2020-seqtrack",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/anaconda3/envs/trackl3d/bin/vot",
+            "cwd": "/home/paper/vots2023/experiment/VideoX/SeqTrack/",
+            "console": "integratedTerminal",
+            "args": [
+                "evaluate",
+                "--workspace",
+                "/home/dataset/vot2020",
+                "seqtrack_l384_ar"
+            ],
+            "justMyCode": false
         }
+
     ]
 }
