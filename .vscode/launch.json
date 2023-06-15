@@ -72,6 +72,21 @@
                 "seqtrack_l384_ar"
             ],
             "justMyCode": false
+        },
+        {
+            "name": "vot_result",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/anaconda3/envs/trackl3d/bin/vot",
+            "cwd": "/home/paper/vots2023/",
+            "console": "integratedTerminal",
+            "args": [
+                "evaluate",
+                "--workspace",
+                "/home/dataset/vots2023",
+                "vot"
+            ],
+            "justMyCode": false
         }
 
     ]

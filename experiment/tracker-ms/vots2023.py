@@ -13,7 +13,7 @@ from util.mask_mapper import MaskMapper
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 from util.range_transform import im_normalization
-
+from tqdm import tqdm
 from tools.painter import mask_painter
 import progressbar
 
@@ -28,7 +28,7 @@ class BaseTracker:
 		xmem_checkpoint: checkpoint of XMem model
 		"""
 		# load configurations
-		with open("./experiment/VideoX/tracker-ms/config/config.yaml", 'r') as stream: 
+		with open("./experiment/tracker-ms/config/config.yaml", 'r') as stream: 
 			config = yaml.safe_load(stream)
 		
 		config['mem_every'] = mem_every
@@ -197,11 +197,12 @@ class MSTracker:
 
 if __name__ == '__main__':
 	# load videos from davis-2017-val
-	f = open('/ssd1/gaomingqi/datasets/davis/ImageSets/2017/val.txt')
-	vid_list = f.read().splitlines()
+	f = open('/home/dataset/vots2023/sequences/list.txt')
+	# vid_list = f.read().splitlines()
+	vid_list = os.listdir('/home/dataset/vots2023/gt_mask/')
 	# for each video
 	for vid in progressbar.progressbar(vid_list):
-		frame_list = glob.glob(os.path.join('/ssd1/gaomingqi/datasets/davis/JPEGImages/480p/', vid, '*.jpg'))
+		frame_list = glob.glob(os.path.join('/home/dataset/vots2023/sequences/', vid, 'color','*.jpg'))
 		frame_list.sort()
 	
 		# load frames
@@ -211,7 +212,7 @@ if __name__ == '__main__':
 		frames = np.stack(frames, 0)    # T, H, W, C
 		
 		# load first frame annotation
-		first_frame_path = os.path.join('/ssd1/gaomingqi/datasets/davis/Annotations/480p/', vid, '00000.png')
+		first_frame_path = os.path.join('/home/dataset/vots2023/gt_mask/', vid, '00000001.png')
 		first_frame_annotation = np.array(Image.open(first_frame_path).convert('P'))    # H, W, C
 
 		# ************************************************************************************
@@ -219,18 +220,18 @@ if __name__ == '__main__':
 		# how to use
 		# ------------------------------------------------------------------------------------
 		# 1/5: set checkpoint
-		XMEM_checkpoint = '/ssd1/gaomingqi/checkpoints/XMem-s012.pth'
+		XMEM_checkpoint = './experiment/tracker-ms/checkpoints/XMem-s012.pth'
 		# 2/5: initialise devices and scale data
-		device_list = [0,0,1,1,2,2,3,3]
+		device_list = [0,1,2,3]
 		scale_list = [
-			{'size': 1080, 'mem_every': 10, 'flip': False},
-			{'size': 1080, 'mem_every': 10, 'flip': True},
+			# {'size': 1080, 'mem_every': 10, 'flip': False},
+			# {'size': 1080, 'mem_every': 10, 'flip': True},
 			{'size': 720, 'mem_every': 10, 'flip': False},
 			{'size': 720, 'mem_every': 10, 'flip': True},
 			{'size': 480, 'mem_every': 10, 'flip': False},
 			{'size': 480, 'mem_every': 10, 'flip': True},
 	
-		]
+			]
 		# ------------------------------------------------------------------------------------
 		# 3/5: initialise tracker
 		mstracker = MSTracker(XMEM_checkpoint, device_list, scale_list)
@@ -239,7 +240,7 @@ if __name__ == '__main__':
 		# frame: numpy array (H, W, C), first_frame_annotation: numpy array (H, W), leave it blank when tracking begins
 		painted_frames = []
 		masks = []
-		for ti, frame in enumerate(frames):
+		for ti, frame in tqdm(enumerate(frames)):
 			if ti == 0:
 				final_mask, painted_frame = mstracker.track(frame, first_frame_annotation)
 			else:
@@ -255,10 +256,10 @@ if __name__ == '__main__':
 		# ************************************************************************************
 
 		# set saving path
-		save_path = os.path.join('/ssd1/gaomingqi/results/TAM/ms-davis-17-val', vid)
+		save_path = os.path.join('/home/dataset/vots2023/results/xmem-ms/', vid)
 		if not os.path.exists(save_path):
-			os.mkdir(save_path)
+			os.makedirs(save_path)
 		# save
 		for ti, mask in enumerate(masks):
 			mask = Image.fromarray(mask)
-			mask.save(f'{save_path}/{ti:05d}.png')
+			mask.save(f'{save_path}/{ti:08d}.png')
