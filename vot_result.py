@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import os
 from PIL import Image
+import trax
 
 class NCCTracker(object):
 
@@ -88,7 +89,8 @@ while True:
         break
 
     image = cv2.imread(imagefile, cv2.IMREAD_GRAYSCALE)
-    result_masks = np.array(Image.open(os.path.join("/home/dataset/vots2023/gt_mask", seq_name, imagefile.split('/')[-1].split('.')[0] + '.png')))
+    # result_masks = np.array(Image.open(os.path.join("/home/dataset/vots2023/gt_mask", seq_name, imagefile.split('/')[-1].split('.')[0] + '.png')))
+    result_masks = np.array(Image.open(os.path.join("/home/dataset/vots2023/results/xmem-ms/", seq_name, imagefile.split('/')[-1].split('.')[0] + '.png')))
 
     new_masks = [(result_masks==i+1) * (i+1) for i in range(len(trackers))]
     

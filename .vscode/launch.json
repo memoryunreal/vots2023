@@ -50,7 +50,7 @@
             "args": [
                 "evaluate",
                 "--workspace",
-                "/home/dataset/vots2023",
+                "/home/dataset/vots2023/dev/",
                 "seqtrack_l256_ar"
             ],
             "env": {
@@ -82,6 +82,21 @@
             "console": "integratedTerminal",
             "args": [
                 "evaluate",
+                "--workspace",
+                "/home/dataset/vots2023/",
+                "vot"
+            ],
+            "justMyCode": false
+        },
+        {
+            "name": "vot_analysis",
+            "type": "python",
+            "request": "launch",
+            "program": "/root/anaconda3/envs/trackl3d/bin/vot",
+            "cwd": "/home/paper/vots2023/",
+            "console": "integratedTerminal",
+            "args": [
+                "analysis",
                 "--workspace",
                 "/home/dataset/vots2023",
                 "vot"
