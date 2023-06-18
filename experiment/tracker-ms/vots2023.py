@@ -212,7 +212,7 @@ if __name__ == '__main__':
 		frames = np.stack(frames, 0)    # T, H, W, C
 		
 		# load first frame annotation
-		first_frame_path = os.path.join('/home/dataset/vots2023/gt_mask/', vid, '00000001.png')
+		first_frame_path = os.path.join('/home/dataset/vots2023/mask_vis/', vid, '00000001.png')
 		first_frame_annotation = np.array(Image.open(first_frame_path).convert('P'))    # H, W, C
 
 		# ************************************************************************************
