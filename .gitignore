@@ -3,3 +3,4 @@ mask_vis
 *.png
 mask_064
 __pycache__/
+*.pth

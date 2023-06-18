@@ -197,12 +197,16 @@ class MSTracker:
 
 if __name__ == '__main__':
 	# load videos from davis-2017-val
-	f = open('/home/dataset/vots2023/sequences/list.txt')
+	f = open('/home/ssd2/tracking/vots2023/sequences/list.txt')
 	# vid_list = f.read().splitlines()
-	vid_list = os.listdir('/home/dataset/vots2023/gt_mask/')
+	vid_list = os.listdir('/home/ssd2/tracking/vots2023/mask_vis/')
+	#vid_list.reverse()
+	# vid_list = ["motorcycle-1"]
 	# for each video
 	for vid in progressbar.progressbar(vid_list):
-		frame_list = glob.glob(os.path.join('/home/dataset/vots2023/sequences/', vid, 'color','*.jpg'))
+		if os.path.exists(os.path.join('/home/ssd2/tracking/vots2023/results/xmem-ms/', vid)):
+			continue
+		frame_list = glob.glob(os.path.join('/home/ssd2/tracking/vots2023/sequences/', vid, 'color','*.jpg'))
 		frame_list.sort()
 	
 		# load frames
@@ -212,8 +216,15 @@ if __name__ == '__main__':
 		frames = np.stack(frames, 0)    # T, H, W, C
 		
 		# load first frame annotation
-		first_frame_path = os.path.join('/home/dataset/vots2023/gt_mask/', vid, '00000001.png')
-		first_frame_annotation = np.array(Image.open(first_frame_path).convert('P'))    # H, W, C
+		first_frame_path = glob.glob(os.path.join('/home/ssd2/tracking/vots2023/mask_vis/', vid, 'object*.png'))
+		first_frame_path.sort()
+		if len(first_frame_path) == 1:
+			first_frame_annotation = np.array(Image.open(first_frame_path[0]).convert('P'))    # H, W, C
+		else:
+			first_frame_annotation = np.array(Image.open(first_frame_path[0]).convert('P'))
+			for i in range(1,len(first_frame_path)):
+				mask_number = i+1 
+				first_frame_annotation = np.clip(first_frame_annotation+ np.array(Image.open(first_frame_path[i]).convert('P')) *(mask_number), 0, mask_number)
 
 		# ************************************************************************************
 		# ------------------------------------------------------------------------------------
@@ -222,7 +233,7 @@ if __name__ == '__main__':
 		# 1/5: set checkpoint
 		XMEM_checkpoint = './experiment/tracker-ms/checkpoints/XMem-s012.pth'
 		# 2/5: initialise devices and scale data
-		device_list = [0,1,2,3]
+		device_list = [1,2,3,5]
 		scale_list = [
 			# {'size': 1080, 'mem_every': 10, 'flip': False},
 			# {'size': 1080, 'mem_every': 10, 'flip': True},
@@ -256,7 +267,7 @@ if __name__ == '__main__':
 		# ************************************************************************************
 
 		# set saving path
-		save_path = os.path.join('/home/dataset/vots2023/results/xmem-ms/', vid)
+		save_path = os.path.join('/home/ssd2/tracking/vots2023/results/xmem-ms/', vid)
 		if not os.path.exists(save_path):
 			os.makedirs(save_path)
 		# save
